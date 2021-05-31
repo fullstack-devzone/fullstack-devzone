@@ -11,25 +11,29 @@ the Backend and Frontend will be developed as separate applications in separate 
 
 ### Features
 * Authentication
-    * Users can register, login, change password and reset password
+    * Users can register, login
 * User Profile
     * Provide name, email, bio, photo, tech skills, social media accounts etc
+    * Change password
     * Change profile pic
-    * Subscribe to certain categories to receive daily or weekly Notification Emails 
-      which contain all new links in their following categories 
 * Any User Actions
-    * Any user(including guest users) can view links of a category with pagination, sort by posted date/upvotes
+    * Any user(including guest users) can view links sort by posted date/votes
 * Authenticated User Actions
-    * Submit a new article/video link with a category and set of tags associated to it
-    * Upvote a link and remove vote
+    * Submit a new article/video link with a set of tags associated to it
+    * Delete own links
 * Admin User Actions
-    * Mark a link as Spam Or Invalid
-    * Delete a link
+    * Delete any link
 
 ### Backend API Specs
 
+#### Authentication Header:
+
+`Authorization: Bearer jwt_token_here`
+
 #### 1. Login
 **URL:** POST /api/auth/login
+
+**Authentication Required:** false
 
 **Request Payload:** 
 ```json
@@ -41,11 +45,11 @@ the Backend and Frontend will be developed as separate applications in separate 
 **Success Response:** 
 ```json
 {
-  "token": "jwt_token",
+  "access_token": "jwt_token",
   "expires_at": "expiry_timestamp",
   "user":  {
       "name": "user",
-      "username": "user@mail.com",
+      "email": "user@mail.com",
       "roles": ["ROLE_ADMIN", "ROLE_USER"]
     }
 }
@@ -58,68 +62,65 @@ curl --header "Content-Type: application/json" \
      --data '{"username":"xyz","password":"xyz"}' \
      http://localhost:8080/api/auth/login
 ```
+
 #### 2. Registration
 **URL:** POST /api/users
+
+**Authentication Required:** false
 
 **Request Payload:** 
 ```json
 {
-  "name": "name",
-  "username": "user@mail.com",
+  "name": "sivaprasad",
+  "email": "sivaprasad@gmail.com",
   "password": "password"
 }
 ```
 
-#### 3. Activate User Registration by Email
-**URL:** GET /api/user/activate?email=user@mail.com&code=unique_code
+**Success Response:** 
+```json
+{
+    "id": 2,
+    "name": "sivaprasad",
+    "email": "sivaprasad@gmail.com",
+    "roles": [
+        "ROLE_USER"
+    ]
+}
+```
 
-#### 4. Change Password
-**URL:** POST /api/user/change-password
+#### 3. Change Password
+**URL:** PUT /api/user/change-password
+
+**Authentication Required:** yes
 
 **Request Payload:** 
 
 ```json
 {
-  "username": "user@mail.com",
-  "old_password": "old_password",
-  "new_password": "new_password"
+  "oldPassword": "old_password",
+  "newPassword": "new_password"
 }
 ```
 
-#### 5. Forgot Password
-**URL:** POST /api/user/forgot-password
-
-**Request Payload:** 
-```json
-{
-  "username": "user@mail.com"
-}
-```
-
-#### 6. Reset Password
-**URL:** POST /api/user/reset-password
-
-**Request Payload:** 
-```json
-{
-  "username": "user@mail.com"
-}
-```
-
-#### 7. Get Login User Info
+#### 4. Get Current Login User Info
 **URL:** GET /api/user
+
+**Authentication Required:** true
 
 **Success Response:** 
 ```json
 {
     "name": "user",
-    "username": "user@mail.com",
+    "email": "user@mail.com",
     "roles": ["ROLE_ADMIN", "ROLE_USER"]
 }
 ```
 
-#### 8. Update User Profile
+#### 5. Update User Profile
 **URL:** PUT /api/user
+
+**Authentication Required:** true
 
 **Request Payload:** 
 ```json
@@ -129,17 +130,19 @@ curl --header "Content-Type: application/json" \
     "location": "Hyderabad, India",
     "skills": ["Java", "Kotlin", "SpringBoot", "Docker"],
     "github": "https://github.com/sivaprasadreddy",
-    "twitter": "https://twitter.com/sivalabs",
-    "email_notifications": "none|daily|weekly",
-    "favourite_categories": ["Java", "ReactJS"]
+    "twitter": "https://twitter.com/sivalabs"
 }
 ```
 
-#### 9. Upload User photo
-**URL:** POST /api/user/photo
+#### 6. Upload User photo
+**URL:** PUT /api/user/profile_pic
 
-#### 10. Get User Profiles
+**Authentication Required:** true
+
+#### 7. Get User Profiles
 **URL:** GET /api/users
+
+**Authentication Required:** false
 
 **Success Response:** 
 ```json
@@ -151,15 +154,15 @@ curl --header "Content-Type: application/json" \
       "location": "Hyderabad, India",
       "skills": ["Java", "Kotlin", "SpringBoot", "Docker"],
       "github": "https://github.com/sivaprasadreddy",
-      "twitter": "https://twitter.com/sivalabs",
-      "email_notifications": "none|daily|weekly",
-      "favourite_categories": ["Java", "ReactJS"]
+      "twitter": "https://twitter.com/sivalabs"
     }
 ]
 ```
 
-#### 11. Get User Profile by Email
-**URL:** GET /api/users/user@gmail.com
+#### 8. Get User Profile by id
+**URL:** GET /api/users/:user_id
+
+**Authentication Required:** false
 
 **Success Response:** 
 ```json
@@ -170,100 +173,106 @@ curl --header "Content-Type: application/json" \
   "location": "Hyderabad, India",
   "skills": ["Java", "Kotlin", "SpringBoot", "Docker"],
   "github": "https://github.com/sivaprasadreddy",
-  "twitter": "https://twitter.com/sivalabs",
-  "email_notifications": "none|daily|weekly",
-  "favourite_categories": ["Java", "ReactJS"]
+  "twitter": "https://twitter.com/sivalabs"
 }
 ```
 
-#### 12. Add new link
-**URL:** POST /api/:category/links
+#### 9. Add new link
+**URL:** POST /api/links
+
+**Authentication Required:** true
 
 **Request Payload:** 
 ```json
 {
   "title": "post tile",
   "url": "url",
-  "type" : "article|video",
   "tags": ["tag1", "tag2"]
 }
 ```
 
-#### 13. Get link
+#### 10. Get link
 **URL:** GET /api/links/:link_id
+
+**Authentication Required:** false
 
 **Success Response:**
 
 ```json
 {
+  "id": 123,
   "title": "post tile",
   "url": "url",
-  "type" : "article|video",
-  "category": "category_name",
-  "tags": ["tag1", "tag2"]
+  "tags": ["tag1", "tag2"],
+  "created_user_id": 123,
+  "created_user_name": "siva",
+  "created_at": "",
+  "updated_at": ""
 }
 ```
 
-#### 14. Update link
+#### 11. Update link
 **URL:** PUT /api/links/:link_id
+
+**Authentication Required:** true
 
 **Request Payload:** 
 ```json
 {
   "title": "post tile",
   "url": "url",
-  "type" : "article|video",
-  "category": "category_name",
   "tags": ["tag1", "tag2"]
 }
 ```
 
-#### 15. Delete link
+#### 12. Delete link
 **URL:** DELETE /api/links/:link_id
 
-#### 16. Get links of a category for a given page number and sort by posted_date or votes
+**Authentication Required:** true
 
-**URL:** GET /api/:category/links?page=1&sort_by=posted_date&sort_order=desc
+#### 13. Get links for a given page number and sort by created date
+
+##### Get All Links
+**URL:** GET /api/links?page=1&size=10&sort=createdAt&direction=DESC
+
+##### Get links by tag
+**URL:** GET /api/links?tag=spring&page=1&size=10&sort=createdAt&direction=DESC
+
+##### Search links
+**URL:** GET /api/links?query=spring&page=1&size=10&sort=createdAt&direction=DESC
+
+**Authentication Required:** false
 
 **Success Response:** 
 ```json
-[
-      {
-        "title": "post tile",
-        "url": "url",
-        "type" : "article|video",
-        "category": "category_name",
-        "tags": ["tag1", "tag2"]
-      },
-    {
-      "title": "post tile",
-      "url": "url",
-      "type" : "article|video",
-      "category": "category_name",
-      "tags": ["tag1", "tag2"]
-    }
-]
-```
-
-#### 17. User upvote/remove vote for a link
-
-**URL:** POST /api/links/:link_id/votes
-
-**Request Payload:** 
-```json
 {
-   "vote": "true|false"
-}
-```
-
-#### 18. Admin marks a link as spam or invalid
-
-**URL:** PUT /api/links/:link_id
-
-**Request Payload:** 
-```json
-{
-  "status": "invalid | spam"
+    "totalElements": 200,
+    "totalPages": 10,
+    "pageNumber": 1,
+    "isFirst": true,
+    "isLast": false,
+    "hasNext": true,
+    "hasPrevious": false,
+    "data": [
+          {
+            "title": "post tile",
+            "url": "url",
+            "tags": ["tag1", "tag2"],
+            "createdBy": {
+                "id": 123,
+                "name": "siva"
+            }       
+          },
+        {
+          "title": "post tile",
+          "url": "url",
+          "tags": ["tag1", "tag2"],
+          "createdBy": {
+                "id": 456,
+                "name": "prasad"
+            } 
+        }
+    ]
 }
 ```
 
