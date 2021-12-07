@@ -24,6 +24,14 @@ the Backend and Frontend will be developed as separate applications in separate 
 * Admin User Actions
     * Delete any link
 
+### Run Postman collection
+
+```shell
+$ brew install newman //MacOS
+$ npm install -g newman
+$ newman run devzone-api.postman_collection.json
+```
+
 ### Backend API Specs
 
 #### Authentication Header:
