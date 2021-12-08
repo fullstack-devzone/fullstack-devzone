@@ -56,6 +56,7 @@ $ newman run devzone-api.postman_collection.json
   "access_token": "jwt_token",
   "expires_at": "expiry_timestamp",
   "user":  {
+      "id": 1,
       "name": "user",
       "email": "user@mail.com",
       "roles": ["ROLE_ADMIN", "ROLE_USER"]
@@ -119,6 +120,7 @@ curl --header "Content-Type: application/json" \
 **Success Response:** 
 ```json
 {
+    "id": 1,
     "name": "user",
     "email": "user@mail.com",
     "roles": ["ROLE_ADMIN", "ROLE_USER"]
@@ -137,8 +139,8 @@ curl --header "Content-Type: application/json" \
     "bio": "",
     "location": "Hyderabad, India",
     "skills": ["Java", "Kotlin", "SpringBoot", "Docker"],
-    "github": "https://github.com/sivaprasadreddy",
-    "twitter": "https://twitter.com/sivalabs"
+    "githubUsername": "https://github.com/sivaprasadreddy",
+    "twitterUsername": "https://twitter.com/sivalabs"
 }
 ```
 
@@ -161,8 +163,8 @@ curl --header "Content-Type: application/json" \
       "bio": "",
       "location": "Hyderabad, India",
       "skills": ["Java", "Kotlin", "SpringBoot", "Docker"],
-      "github": "https://github.com/sivaprasadreddy",
-      "twitter": "https://twitter.com/sivalabs"
+      "githubUsername": "https://github.com/sivaprasadreddy",
+      "twitterUsername": "https://twitter.com/sivalabs"
     }
 ]
 ```
@@ -180,8 +182,8 @@ curl --header "Content-Type: application/json" \
   "bio": "",
   "location": "Hyderabad, India",
   "skills": ["Java", "Kotlin", "SpringBoot", "Docker"],
-  "github": "https://github.com/sivaprasadreddy",
-  "twitter": "https://twitter.com/sivalabs"
+  "githubUsername": "https://github.com/sivaprasadreddy",
+  "twitterUsername": "https://twitter.com/sivalabs"
 }
 ```
 
