@@ -22,8 +22,8 @@ the Backend and Frontend will be developed as separate applications in separate 
 ### Run Postman collection
 
 Assuming the backend API application is running on http://localhost:8080/ and there are 2 users exists with following credentials:
-* **Admin**: admin/admin
-* **Demo User**: demo/demo
+* **Admin**: admin@gmail.com/admin
+* **Normal User**: siva@gmail.com/siva
 
 we can run smoke tests using the postman collection as follows:
 
@@ -37,7 +37,7 @@ $ newman run devzone-api.postman_collection.json
 
 #### Authentication Header:
 
-`Authorization: Bearer jwt_token_here`
+`Authorization: Bearer JWT_TOKEN_HERE`
 
 #### 1. Login
 * **URL:** POST /api/auth/login
@@ -59,7 +59,7 @@ $ newman run devzone-api.postman_collection.json
       "id": 1,
       "name": "user",
       "email": "user@mail.com",
-      "roles": ["ROLE_ADMIN", "ROLE_USER"]
+      "role": "ROLE_USER"
     }
 }
 ```
@@ -102,9 +102,7 @@ curl --location --request POST 'http://localhost:8080/api/users' \
     "id": 2,
     "name": "sivaprasad",
     "email": "sivaprasad@gmail.com",
-    "roles": [
-        "ROLE_USER"
-    ]
+    "role": "ROLE_USER"
 }
 ```
 
@@ -118,32 +116,39 @@ curl --location --request POST 'http://localhost:8080/api/users' \
     "id": 1,
     "name": "user",
     "email": "user@mail.com",
-    "roles": ["ROLE_ADMIN", "ROLE_USER"]
+    "role": "ROLE_ADMIN"
 }
 ```
 
 ```shell
-curl --location --request GET 'http://localhost:8080/api/user' \
---header 'Authorization: Bearer JWT_TOKEN'
+curl --location --request GET 'http://localhost:8080/api/auth/me' \
+--header 'Authorization: Bearer JWT_TOKEN_HERE'
 ```
 
-#### 4. Get User Profile by id
-* **URL:** GET /api/users/:user_id
+#### 5. Get all tags
+* **URL:** GET /api/tags
 * **Authentication Required:** false
 
-**Success Response:** 
+**Response Payload:**
 ```json
-{
-  "name": "user",
-  "email": "user@mail.com"
-}
+[
+  {
+    "id": 1,
+    "name": "java"
+  },
+  {
+    "id": 2,
+    "name": "spring"
+  }
+]
 ```
 
 ```shell
-curl --location --request GET 'http://localhost:8080/api/users/1'
+curl --location --request GET 'http://localhost:8080/api/tags' \
+--header 'Content-Type: application/json'
 ```
 
-#### 5. Add new link
+#### 6. Add new link
 * **URL:** POST /api/links
 * **Authentication Required:** true
 
@@ -159,7 +164,7 @@ curl --location --request GET 'http://localhost:8080/api/users/1'
 ```shell
 curl --location --request POST 'http://localhost:8080/api/links' \
 --header 'Content-Type: application/json' \
---header 'Authorization: Bearer JWT_TOKEN' \
+--header 'Authorization: Bearer JWT_TOKEN_HERE' \
 --data-raw '{
 	"url": "https://sivalabs.in",
 	"title": "SivaLabs blog",
@@ -170,7 +175,7 @@ curl --location --request POST 'http://localhost:8080/api/links' \
 }'
 ```
 
-#### 6. Get link by Id
+#### 7. Get link by Id
 * **URL:** GET /api/links/:link_id
 * **Authentication Required:** false
 
@@ -192,25 +197,22 @@ curl --location --request POST 'http://localhost:8080/api/links' \
 ```
 
 ```shell
-curl --location --request GET 'http://localhost:8080/api/links/21' \
+curl --location --request GET 'http://localhost:8080/api/links/1' \
 --header 'Content-Type: application/json'
 ```
 
-#### 7. Delete link
+#### 8. Delete link
 * **URL:** DELETE /api/links/:link_id
 * **Authentication Required:** true
 
 ```shell
-curl --location --request DELETE 'http://localhost:8080/api/links/21' \
+curl --location --request DELETE 'http://localhost:8080/api/links/1' \
 --header 'Content-Type: application/json' \
---header 'Authorization: Bearer JWT_TOKEN'
+--header 'Authorization: Bearer JWT_TOKEN_HERE'
 ```
 
-#### 8. Get links for a given page number and sort by created date
-* **Authentication Required:** false
-
 ##### 9. Get All Links
-* **URL:** GET /api/links?page=1&size=10&sort=createdAt&direction=DESC
+* **URL:** GET /api/links?page=1
 
 ```shell
 curl --location --request GET 'http://localhost:8080/api/links?page=1' \
@@ -218,18 +220,18 @@ curl --location --request GET 'http://localhost:8080/api/links?page=1' \
 ```
 
 ##### 10. Get links by tag
-* **URL:** GET /api/links?tag=spring&page=1&size=10&sort=createdAt&direction=DESC
+* **URL:** GET /api/links?tag=spring&page=1
 
 ```shell
-curl --location --request GET 'http://localhost:8080/api/links?tag=jackson' \
+curl --location --request GET 'http://localhost:8080/api/links?tag=jackson&page=1' \
 --header 'Content-Type: application/json'
 ```
 
 ##### 11. Search links
-* **URL:** GET /api/links?query=spring&page=1&size=10&sort=createdAt&direction=DESC
+* **URL:** GET /api/links?query=spring&page=1
 
 ```shell
-curl --location --request GET 'http://localhost:8080/api/links?query=spring' \
+curl --location --request GET 'http://localhost:8080/api/links?query=spring&page=1' \
 --header 'Content-Type: application/json'
 ```
 
