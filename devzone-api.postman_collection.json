@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "a60157fc-2218-4168-9a3b-2771da0ef50c",
-		"name": "devzone-api-springboot",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"_postman_id": "06375304-46be-4cf9-80c3-f61d59a97f71",
+		"name": "devzone-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2953846"
 	},
 	"item": [
 		{
@@ -84,7 +85,7 @@
 					"raw": "{\n\t\"username\": \"{{NewUserEmail}}\",\n\t\"password\": \"secret\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/auth/login",
+					"raw": "http://localhost:8080/api/login",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -92,7 +93,6 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"auth",
 						"login"
 					]
 				}
@@ -100,13 +100,13 @@
 			"response": []
 		},
 		{
-			"name": "get-login-user",
+			"name": "get-loggedin-user",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Get  Logged in User Info Successfully\", function () {",
+							"pm.test(\"Get Logged in User Info Successfully\", function () {",
 							"    pm.response.to.have.status(200);",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.name).to.eql(pm.environment.get(\"NewUserName\"));",
@@ -129,7 +129,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8080/api/auth/me",
+					"raw": "http://localhost:8080/api/me",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -137,7 +137,6 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"auth",
 						"me"
 					]
 				}
@@ -176,7 +175,7 @@
 					"raw": "{\n\t\"username\": \"admin@gmail.com\",\n\t\"password\": \"admin\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/auth/login",
+					"raw": "http://localhost:8080/api/login",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -184,7 +183,6 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"auth",
 						"login"
 					]
 				}
@@ -228,17 +226,17 @@
 			"response": []
 		},
 		{
-			"name": "create-link",
+			"name": "create-post",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Create Link Successfully\", function () {",
+							"pm.test(\"Create Post Successfully\", function () {",
 							"    pm.response.to.have.status(201);",
 							"    var jsonData = pm.response.json();",
-							"    postman.clearEnvironmentVariable(\"NewLinkId\");",
-							"    postman.setEnvironmentVariable(\"NewLinkId\", jsonData.id);",
+							"    postman.clearEnvironmentVariable(\"NewPostId\");",
+							"    postman.setEnvironmentVariable(\"NewPostId\", jsonData.id);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -259,10 +257,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"url\": \"http://sivalabs.in\",\n\t\"title\": \"SivaLabs blog\",\n\t\"tags\":[\n\t\t\"spring\",\n\t\t\"rest-api\"\n\t]\n}"
+					"raw": "{\n\t\"url\": \"http://sivalabs.in\",\n\t\"title\": \"SivaLabs blog\",\n\t\"content\":\"My experiments with technology\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/links",
+					"raw": "http://localhost:8080/api/posts",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -270,20 +268,20 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"links"
+						"posts"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "get-links",
+			"name": "get-posts",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Get All Links Data Successfully\", function () {",
+							"pm.test(\"Get posts successfully\", function () {",
 							"    pm.response.to.have.status(200);",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.totalElements).to.gt(0);",
@@ -310,7 +308,7 @@
 					"formdata": []
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/links?page=1",
+					"raw": "http://localhost:8080/api/posts?page=1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -318,7 +316,7 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"links"
+						"posts"
 					],
 					"query": [
 						{
@@ -331,13 +329,13 @@
 			"response": []
 		},
 		{
-			"name": "get-link-by-id",
+			"name": "get-post-by-id",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Get Link By Id Successfully\", function () {",
+							"pm.test(\"Get Post By Id Successfully\", function () {",
 							"    pm.response.to.have.status(200);",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.title).to.not.null;",
@@ -363,7 +361,7 @@
 					"formdata": []
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/links/{{NewLinkId}}",
+					"raw": "http://localhost:8080/api/posts/{{NewPostId}}",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -371,61 +369,21 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"links",
-						"{{NewLinkId}}"
+						"posts",
+						"{{NewPostId}}"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "get-all-tags",
+			"name": "search-posts",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Get All Tags Data Successfully\", function () {",
-							"    pm.response.to.have.status(200);",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.length).to.gt(0);",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/api/tags",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"tags"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "search-links",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Search Links Successfully\", function () {",
+							"pm.test(\"Search posts successfully\", function () {",
 							"    pm.response.to.have.status(200);",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.totalElements).to.gt(0);",
@@ -445,7 +403,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8080/api/links?query=spring",
+					"raw": "http://localhost:8080/api/posts?query=spring&page=1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -453,59 +411,16 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"links"
+						"posts"
 					],
 					"query": [
 						{
 							"key": "query",
 							"value": "spring"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "get-links-by-tag",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Get Links By Tag Successfully\", function () {",
-							"    pm.response.to.have.status(200);",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.totalElements).to.gt(0);",
-							"    pm.expect(jsonData.data.length).to.gt(0);",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/api/links?tag=jackson",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"links"
-					],
-					"query": [
+						},
 						{
-							"key": "tag",
-							"value": "jackson"
+							"key": "page",
+							"value": "1"
 						}
 					]
 				}
@@ -513,13 +428,13 @@
 			"response": []
 		},
 		{
-			"name": "delete-link",
+			"name": "delete-post",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Delete Link Successfully\", function () {",
+							"pm.test(\"Delete post successfully\", function () {",
 							"    pm.response.to.have.status(200);",
 							"});"
 						],
@@ -544,7 +459,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/links/{{NewLinkId}}",
+					"raw": "http://localhost:8080/api/posts/{{NewLinkId}}",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -552,47 +467,8 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"links",
+						"posts",
 						"{{NewLinkId}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "actuator-get-loggers",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Get Actuator Logger Levels Successfully\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/actuator/loggers/com.sivalabs",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"actuator",
-						"loggers",
-						"com.sivalabs"
 					]
 				}
 			},

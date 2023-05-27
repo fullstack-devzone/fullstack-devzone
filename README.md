@@ -1,22 +1,21 @@
 # Fullstack DevZone
 
-FullstackDevZone is an approach to learn various programming languages and frameworks by building a sample application.
+FullstackDevZone is an approach to learning various programming languages and frameworks by building a sample application.
 This idea is heavily inspired by [RealWorld](https://github.com/gothinkster/realworld).
 
 ## DevZone application
 
-DevZone is a web application where developers can register and post their favourite article/video links.
+DevZone is a web application where developers can register and post their favourite article/video as posts.
 To enable the application to be build using different programming languages and frameworks, 
 the Backend and Frontend will be developed as separate applications in separate repositories. 
 
 ### Features
 * Users can register and login
-* Authenticated user can create a new link with a set of tags associated to it
-* Authenticated user can delete own links
-* Admin user can delete any link
-* Any user(including guest users) can view links with pagination
+* Authenticated user can create a new post
+* Authenticated users can delete their own posts
+* Admin user can delete any post
+* Any user(including guest users) can view posts with pagination
   * sort by posted date desc (default)
-  * by tag
   * by searching for a keyword
 
 ### Run Postman collection
@@ -40,7 +39,7 @@ $ newman run devzone-api.postman_collection.json
 `Authorization: Bearer JWT_TOKEN_HERE`
 
 #### 1. Login
-* **URL:** POST /api/auth/login
+* **URL:** POST /api/login
 * **Authentication Required:** false
 
 **Request Payload:**
@@ -66,7 +65,7 @@ $ newman run devzone-api.postman_collection.json
 
 **Example:**
 ```shell script
-curl --location --request POST 'http://localhost:8080/api/auth/login' \
+curl --location --request POST 'http://localhost:8080/api/login' \
 --header 'Content-Type: application/json' \
 --data-raw '{
 	"username": "admin@gmail.com",
@@ -107,7 +106,7 @@ curl --location --request POST 'http://localhost:8080/api/users' \
 ```
 
 #### 3. Get Current Logged-in User Info
-* **URL:** GET /api/auth/me
+* **URL:** GET /api/me
 * **Authentication Required:** true
 
 **Success Response:** 
@@ -121,35 +120,31 @@ curl --location --request POST 'http://localhost:8080/api/users' \
 ```
 
 ```shell
-curl --location --request GET 'http://localhost:8080/api/auth/me' \
+curl --location --request GET 'http://localhost:8080/api/me' \
 --header 'Authorization: Bearer JWT_TOKEN_HERE'
 ```
 
-#### 5. Get all tags
-* **URL:** GET /api/tags
-* **Authentication Required:** false
 
-**Response Payload:**
+#### 4. Get User by id
+* **URL:** GET /api/users/:id
+* **Authentication Required:** true
+
+**Success Response:**
 ```json
-[
-  {
+{
     "id": 1,
-    "name": "java"
-  },
-  {
-    "id": 2,
-    "name": "spring"
-  }
-]
+    "name": "user",
+    "email": "user@mail.com",
+    "role": "ROLE_ADMIN"
+}
 ```
 
 ```shell
-curl --location --request GET 'http://localhost:8080/api/tags' \
---header 'Content-Type: application/json'
+curl --location --request GET 'http://localhost:8080/api/users/1'
 ```
 
-#### 6. Add new link
-* **URL:** POST /api/links
+#### 5. Create a new post
+* **URL:** POST /api/posts
 * **Authentication Required:** true
 
 **Request Payload:** 
@@ -157,26 +152,23 @@ curl --location --request GET 'http://localhost:8080/api/tags' \
 {
   "title": "post tile",
   "url": "url",
-  "tags": ["tag1", "tag2"]
+  "content": "content"
 }
 ```
 
 ```shell
-curl --location --request POST 'http://localhost:8080/api/links' \
+curl --location --request POST 'http://localhost:8080/api/posts' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer JWT_TOKEN_HERE' \
 --data-raw '{
 	"url": "https://sivalabs.in",
 	"title": "SivaLabs blog",
-	"tags":[
-		"spring",
-		"rest-api"
-	]
+	"content":"My experiments with technology"
 }'
 ```
 
-#### 7. Get link by Id
-* **URL:** GET /api/links/:link_id
+#### 6. Get post by PostId
+* **URL:** GET /api/posts/:postId
 * **Authentication Required:** false
 
 **Success Response:**
@@ -186,7 +178,7 @@ curl --location --request POST 'http://localhost:8080/api/links' \
   "id": 123,
   "title": "post tile",
   "url": "url",
-  "tags": ["tag1", "tag2"],
+  "content": "content",
   "createdBy": {
     "id": 123,
     "name": "siva"
@@ -197,41 +189,33 @@ curl --location --request POST 'http://localhost:8080/api/links' \
 ```
 
 ```shell
-curl --location --request GET 'http://localhost:8080/api/links/1' \
+curl --location --request GET 'http://localhost:8080/api/posts/1' \
 --header 'Content-Type: application/json'
 ```
 
-#### 8. Delete link
-* **URL:** DELETE /api/links/:link_id
+#### 7. Delete a post by PostId
+* **URL:** DELETE /api/posts/:postId
 * **Authentication Required:** true
 
 ```shell
-curl --location --request DELETE 'http://localhost:8080/api/links/1' \
+curl --location --request DELETE 'http://localhost:8080/api/posts/1' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer JWT_TOKEN_HERE'
 ```
 
-##### 9. Get All Links
-* **URL:** GET /api/links?page=1
+##### 8. Get Posts
+* **URL:** GET /api/posts?page=1
 
 ```shell
-curl --location --request GET 'http://localhost:8080/api/links?page=1' \
+curl --location --request GET 'http://localhost:8080/api/posts?page=1' \
 --header 'Content-Type: application/json'
 ```
 
-##### 10. Get links by tag
-* **URL:** GET /api/links?tag=spring&page=1
+##### 9. Search posts
+* **URL:** GET /api/posts?query=spring&page=1
 
 ```shell
-curl --location --request GET 'http://localhost:8080/api/links?tag=jackson&page=1' \
---header 'Content-Type: application/json'
-```
-
-##### 11. Search links
-* **URL:** GET /api/links?query=spring&page=1
-
-```shell
-curl --location --request GET 'http://localhost:8080/api/links?query=spring&page=1' \
+curl --location --request GET 'http://localhost:8080/api/posts?query=spring&page=1' \
 --header 'Content-Type: application/json'
 ```
 
@@ -250,7 +234,7 @@ curl --location --request GET 'http://localhost:8080/api/links?query=spring&page
             "id": 1,
             "title": "post tile",
             "url": "url",
-            "tags": ["tag1", "tag2"],
+            "content": "content",
             "createdBy": {
                 "id": 123,
                 "name": "siva"
@@ -260,7 +244,7 @@ curl --location --request GET 'http://localhost:8080/api/links?query=spring&page
           "id": 2,
           "title": "post tile",
           "url": "url",
-          "tags": ["tag1", "tag2"],
+          "content": "content",
           "createdBy": {
                 "id": 456,
                 "name": "prasad"
@@ -273,4 +257,4 @@ curl --location --request GET 'http://localhost:8080/api/links?query=spring&page
 ## Guidelines
 * Implement unit and integration tests
 * Decent code coverage is nice to have
-* Implement continuous integration CI using GitHub Actions or Travis
+* Implement continuous integration CI using GitHub Actions or CircleCI etc
