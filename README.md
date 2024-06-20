@@ -20,7 +20,9 @@ the Backend and Frontend will be developed as separate applications in separate 
 
 ### Run Postman collection
 
-Assuming the backend API application is running on http://localhost:8080/ and there are 2 users exists with following credentials:
+Assuming the backend API application is running on http://localhost:8080/ and 
+there are two users exists with the following credentials:
+
 * **Admin**: admin@gmail.com/admin
 * **Normal User**: siva@gmail.com/siva
 
@@ -34,13 +36,8 @@ $ newman run devzone-api.postman_collection.json
 
 ### Backend API Specs
 
-#### Authentication Header:
-
-`Authorization: Bearer JWT_TOKEN_HERE`
-
 #### 1. Login
-* **URL:** POST /api/login
-* **Authentication Required:** false
+* **URL:** `POST /api/login`
 
 **Request Payload:**
 ```json
@@ -65,17 +62,16 @@ $ newman run devzone-api.postman_collection.json
 
 **Example:**
 ```shell script
-curl --location --request POST 'http://localhost:8080/api/login' \
---header 'Content-Type: application/json' \
---data-raw '{
+curl -X POST 'http://localhost:8080/api/login' \
+-H 'Content-Type: application/json' \
+-d '{
 	"username": "admin@gmail.com",
 	"password": "admin"
 }'
 ```
 
 #### 2. Registration
-* **URL:** POST /api/users
-* **Authentication Required:** false
+* **URL:** `POST /api/users`
 
 **Request Payload:** 
 ```json
@@ -87,65 +83,28 @@ curl --location --request POST 'http://localhost:8080/api/login' \
 ```
 
 ```shell
-curl --location --request POST 'http://localhost:8080/api/users' \
---header 'Content-Type: application/json' \
---data-raw '{
+curl -X POST 'http://localhost:8080/api/users' \
+-H 'Content-Type: application/json' \
+-d '{
 	"name":"newuser",
 	"email": "newuser@gmail.com",
 	"password": "secret"
 }'
 ```
+
 **Success Response:** 
 ```json
 {
     "id": 2,
-    "name": "sivaprasad",
-    "email": "sivaprasad@gmail.com",
+    "name": "newuser",
+    "email": "newuser@gmail.com",
     "role": "ROLE_USER"
 }
 ```
 
-#### 3. Get Current Logged-in User Info
-* **URL:** GET /api/me
-* **Authentication Required:** true
-
-**Success Response:** 
-```json
-{
-    "id": 1,
-    "name": "user",
-    "email": "user@mail.com",
-    "role": "ROLE_ADMIN"
-}
-```
-
-```shell
-curl --location --request GET 'http://localhost:8080/api/me' \
---header 'Authorization: Bearer JWT_TOKEN_HERE'
-```
-
-
-#### 4. Get User by id
-* **URL:** GET /api/users/:id
-* **Authentication Required:** true
-
-**Success Response:**
-```json
-{
-    "id": 1,
-    "name": "user",
-    "email": "user@mail.com",
-    "role": "ROLE_ADMIN"
-}
-```
-
-```shell
-curl --location --request GET 'http://localhost:8080/api/users/1'
-```
-
-#### 5. Create a new post
-* **URL:** POST /api/posts
-* **Authentication Required:** true
+#### 3. Create a new post
+* **URL:** `POST /api/posts`
+* `Authorization: Bearer JWT_TOKEN_HERE`
 
 **Request Payload:** 
 ```json
@@ -157,19 +116,19 @@ curl --location --request GET 'http://localhost:8080/api/users/1'
 ```
 
 ```shell
-curl --location --request POST 'http://localhost:8080/api/posts' \
---header 'Content-Type: application/json' \
---header 'Authorization: Bearer JWT_TOKEN_HERE' \
---data-raw '{
+curl -X POST 'http://localhost:8080/api/posts' \
+-H 'Content-Type: application/json' \
+-H 'Authorization: Bearer JWT_TOKEN_HERE' \
+-d '{
 	"url": "https://sivalabs.in",
 	"title": "SivaLabs blog",
 	"content":"My experiments with technology"
 }'
 ```
 
-#### 6. Get post by PostId
-* **URL:** GET /api/posts/:postId
-* **Authentication Required:** false
+#### 4. Get post by PostId
+* **URL:** `GET /api/posts/:postId`
+* `Authorization: Bearer JWT_TOKEN_HERE`
 
 **Success Response:**
 
@@ -189,34 +148,24 @@ curl --location --request POST 'http://localhost:8080/api/posts' \
 ```
 
 ```shell
-curl --location --request GET 'http://localhost:8080/api/posts/1' \
---header 'Content-Type: application/json'
+curl -X GET 'http://localhost:8080/api/posts/1'
 ```
 
-#### 7. Delete a post by PostId
+#### 5. Delete a post by PostId
 * **URL:** DELETE /api/posts/:postId
 * **Authentication Required:** true
 
 ```shell
-curl --location --request DELETE 'http://localhost:8080/api/posts/1' \
---header 'Content-Type: application/json' \
---header 'Authorization: Bearer JWT_TOKEN_HERE'
+curl -X DELETE 'http://localhost:8080/api/posts/1' \
+-H 'Authorization: Bearer JWT_TOKEN_HERE'
 ```
 
-##### 8. Get Posts
-* **URL:** GET /api/posts?page=1
+##### 6. Get Posts
+* **URL:** `GET /api/posts?page=1&query=keyword`
 
 ```shell
-curl --location --request GET 'http://localhost:8080/api/posts?page=1' \
---header 'Content-Type: application/json'
-```
-
-##### 9. Search posts
-* **URL:** GET /api/posts?query=spring&page=1
-
-```shell
-curl --location --request GET 'http://localhost:8080/api/posts?query=spring&page=1' \
---header 'Content-Type: application/json'
+curl -X GET 'http://localhost:8080/api/posts?page=1' \
+-H 'Content-Type: application/json'
 ```
 
 **Success Response:** 
@@ -252,6 +201,42 @@ curl --location --request GET 'http://localhost:8080/api/posts?query=spring&page
         }
     ]
 }
+```
+
+#### 7. Get Current Logged-in User Info (Optional)
+* **URL:** `GET /api/me`
+* **Authentication Required:** true
+
+**Success Response:**
+```json
+{
+    "id": 1,
+    "name": "user",
+    "email": "user@mail.com",
+    "role": "ROLE_ADMIN"
+}
+```
+
+```shell
+curl -X GET 'http://localhost:8080/api/me' \
+-H 'Authorization: Bearer JWT_TOKEN_HERE'
+```
+
+#### 8. Get User by id (Optional)
+* **URL:** `GET /api/users/:id`
+
+**Success Response:**
+```json
+{
+    "id": 1,
+    "name": "user",
+    "email": "user@mail.com",
+    "role": "ROLE_USER"
+}
+```
+
+```shell
+curl -X GET 'http://localhost:8080/api/users/1'
 ```
 
 ## Guidelines

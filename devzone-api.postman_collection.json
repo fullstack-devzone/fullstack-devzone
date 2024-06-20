@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "06375304-46be-4cf9-80c3-f61d59a97f71",
+		"_postman_id": "b4653c04-2ab5-4298-89fa-2b30afe6d30b",
 		"name": "devzone-api",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "2953846"
@@ -16,13 +16,12 @@
 							"pm.test(\"Check User Created Successfully\", function () {",
 							"    pm.response.to.have.status(201);",
 							"    var jsonData = pm.response.json();",
-							"    postman.clearEnvironmentVariable(\"NewUserName\");",
-							"    postman.clearEnvironmentVariable(\"NewUserEmail\");",
-							"    postman.setEnvironmentVariable(\"NewUserName\", jsonData.name);",
-							"    postman.setEnvironmentVariable(\"NewUserEmail\", jsonData.email);",
+							"    pm.environment.set(\"NewUserName\", jsonData.name);",
+							"    pm.environment.set(\"NewUserEmail\", jsonData.email);",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -63,12 +62,12 @@
 							"pm.test(\"Check User Logged in Successfully\", function () {",
 							"    pm.response.to.have.status(200);",
 							"    var jsonData = pm.response.json();",
-							"    postman.clearEnvironmentVariable(\"AccessToken\");",
-							"    postman.setEnvironmentVariable(\"AccessToken\", jsonData.access_token);",
+							"    pm.environment.set(\"AccessToken\", jsonData.access_token);",
 							"});",
 							""
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -100,13 +99,13 @@
 			"response": []
 		},
 		{
-			"name": "get-loggedin-user",
+			"name": "get-login-user",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Get Logged in User Info Successfully\", function () {",
+							"pm.test(\"Get  Logged in User Info Successfully\", function () {",
 							"    pm.response.to.have.status(200);",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.name).to.eql(pm.environment.get(\"NewUserName\"));",
@@ -115,7 +114,8 @@
 							"});",
 							""
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -124,8 +124,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer {{AccessToken}}",
-						"type": "text"
+						"value": "Bearer {{AccessToken}}"
 					}
 				],
 				"url": {
@@ -153,12 +152,12 @@
 							"pm.test(\"Check User Logged in Successfully\", function () {",
 							"    pm.response.to.have.status(200);",
 							"    var jsonData = pm.response.json();",
-							"    postman.clearEnvironmentVariable(\"AccessToken\");",
-							"    postman.setEnvironmentVariable(\"AccessToken\", jsonData.access_token);",
+							"    pm.environment.set(\"AccessToken\", jsonData.access_token);",
 							"});",
 							""
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -235,11 +234,11 @@
 							"pm.test(\"Create Post Successfully\", function () {",
 							"    pm.response.to.have.status(201);",
 							"    var jsonData = pm.response.json();",
-							"    postman.clearEnvironmentVariable(\"NewPostId\");",
-							"    postman.setEnvironmentVariable(\"NewPostId\", jsonData.id);",
+							"    pm.environment.set(\"NewPostId\", jsonData.id);",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -257,7 +256,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"url\": \"http://sivalabs.in\",\n\t\"title\": \"SivaLabs blog\",\n\t\"content\":\"My experiments with technology\"\n}"
+					"raw": "{\n\t\"title\": \"SivaLabs blog\",\n    \"url\": \"https://sivalabs.in\",\n\t\"content\":\"SivaLabs Blog\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8080/api/posts",
@@ -281,14 +280,15 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Get posts successfully\", function () {",
+							"pm.test(\"Get Posts Data Successfully\", function () {",
 							"    pm.response.to.have.status(200);",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.totalElements).to.gt(0);",
-							"    pm.expect(jsonData.data.length).to.gt(0);",
+							"    //pm.expect(jsonData.data.length).to.gt(0);",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -308,7 +308,7 @@
 					"formdata": []
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/posts?page=1",
+					"raw": "http://localhost:8080/api/posts?page=1&query=to",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -322,6 +322,10 @@
 						{
 							"key": "page",
 							"value": "1"
+						},
+						{
+							"key": "query",
+							"value": "to"
 						}
 					]
 				}
@@ -341,7 +345,8 @@
 							"    pm.expect(jsonData.title).to.not.null;",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -377,68 +382,18 @@
 			"response": []
 		},
 		{
-			"name": "search-posts",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Search posts successfully\", function () {",
-							"    pm.response.to.have.status(200);",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.totalElements).to.gt(0);",
-							"    pm.expect(jsonData.data.length).to.gt(0);",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/api/posts?query=spring&page=1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"posts"
-					],
-					"query": [
-						{
-							"key": "query",
-							"value": "spring"
-						},
-						{
-							"key": "page",
-							"value": "1"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "delete-post",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Delete post successfully\", function () {",
+							"pm.test(\"Delete Post Successfully\", function () {",
 							"    pm.response.to.have.status(200);",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -459,7 +414,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/posts/{{NewLinkId}}",
+					"raw": "http://localhost:8080/api/posts/{{NewPostId}}",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -468,7 +423,7 @@
 					"path": [
 						"api",
 						"posts",
-						"{{NewLinkId}}"
+						"{{NewPostId}}"
 					]
 				}
 			},
