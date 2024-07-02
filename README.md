@@ -159,8 +159,8 @@ curl -X POST 'http://localhost:8080/api/posts' \
     "id": 123,
     "name": "siva"
   },
-  "created_at": "",
-  "updated_at": ""
+  "createdAt": "",
+  "updatedAt": ""
 }
 ```
 
