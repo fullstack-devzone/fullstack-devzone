@@ -26,13 +26,30 @@ there are two users exists with the following credentials:
 * **Admin**: admin@gmail.com/admin
 * **Normal User**: siva@gmail.com/siva
 
-we can run smoke tests using the postman collection as follows:
+we can run smoke tests using the Postman collection as follows:
 
 ```shell
 $ brew install newman //MacOS
 $ npm install -g newman
 $ newman run devzone-api.postman_collection.json
 ```
+
+## Backend API Implementations
+
+| Name                                                                                  | Description                                                                     |
+|---------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| [devzone-api-springboot](https://github.com/fullstack-devzone/devzone-api-springboot) | Spring Boot, Spring Data JPA, Spring Security, Postgres, Gradle, Testcontainers |
+| [devzone-api-quarkus](https://github.com/fullstack-devzone/devzone-api-quarkus)       | Quarkus, Hibernate ORM Panache, Postgres, Quarkus JWT Security, Maven           |
+| [devzone-api-micronaut](https://github.com/fullstack-devzone/devzone-api-micronaut)   | Micronaut, Micronaut Data JPA, Micronaut Security JWT, Maven                    |
+| [devzone-api-golang](https://github.com/fullstack-devzone/devzone-api-golang)         | Go, Gin, pgx, Postgres, golang-migrate, golang-jwt, Testcontainers              |
+
+## Frontend UI Implementations
+
+| Name                                                                                            | Description                            |
+|-------------------------------------------------------------------------------------------------|----------------------------------------|
+| [devzone-ui-angular](https://github.com/fullstack-devzone/devzone-ui-angular)                   | Angular 18, Bootstrap                  |
+| [devzone-ui-react-typescript](https://github.com/fullstack-devzone/devzone-ui-react-typescript) | React 17, Axios, Bootstrap, TypeScript |
+
 
 ### Backend API Specs
 
